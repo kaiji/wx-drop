@@ -1,8 +1,8 @@
 <view class="container">
   <image class="bg" src="/images/bg.png"></image>
 </view>
-<view class='contentWarp'>
-  <!-- *************操作区域*************  -->
+<view class='contentWarp' bindtap="cancelActive" data-type="empty">
+  <!-- *************操作区域************* -->
   <block wx:for="{{itemList}}" wx:key="{{item.id}}">
     <!-- 圆心坐标 <text style='position:absolute;top:{{item.y}}px;left:{{item.x}}px;width:2px;height:2px;background-color:yellow;z-index:500'></text> -->
     <view class='touchWrap' style='transform: scale({{item.scale}});top:{{item.top}}px;left:{{item.left}}px; z-index:{{item.active?100:1}}'>
@@ -13,10 +13,19 @@
       </view>
     </view>
   </block>
-  <!-- **************操作区域************  -->
-  <view class="fixed">
-    <button bindtap="openMask">合成图片</button>
-  </view>
+  <!-- **************操作区域************ -->
+</view>
+<view class="menu-box">
+  <button bindtap="openMask">合成图片</button>
+  <scroll-view class="scroll-label" scroll-x>
+    <view class="label-img-wrap">
+      <block wx:for="{{labelList}}" wx:key="{{item.url}}">
+        <view class="label-img-item" data-item="{{item}}" bindtap="setDropItem">
+          <image class="label-img-inner" src="{{item.url}}"></image>
+        </view>
+      </block>
+    </view>
+  </scroll-view>
 </view>
 <view class='canvasWrap' hidden="{{!showCanvas}}">
   <image class="resImg" bindlongtap="saveImg" src="{{canvasTemImg}}" mode="widthFix"></image>
@@ -25,6 +34,5 @@
     <button bindtap='disappearCanvas'>关闭</button>
   </view>
 </view>
-
 <!-- bug点：一定不要用if hidden 隐藏canvas会导致很多api调用bug -->
-<canvas class='maskCanvas' canvas-id="maskCanvas" style='width:{{canvasWidth}}px; height:{{canvasHeight}}px;'></canvas>
+<canvas class='maskCanvas' id="maskCanvas" canvas-id="maskCanvas" style='width:{{canvasWidth}}px; height:{{canvasHeight}}px;'></canvas>
